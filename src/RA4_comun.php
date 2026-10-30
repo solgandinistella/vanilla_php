@@ -3,6 +3,8 @@
 
  require_once __DIR__ . '/RA3_formularios.php';
  require_once __DIR__ . '/ValidadorCurriculo.php';
+ require_once __DIR__ . '/Autenticador.php';
+
 
  const NOMBRE_CENTRO = 'CIFP Carlos III';
 
@@ -20,4 +22,53 @@
          'ASIR' => new Ciclo(3, 'ASIR', 'Administración de Sistemas Informáticos en Red', Ciclo::GRADO_SUPERIOR),
          'SMR'  => new Ciclo(4, 'SMR', 'Sistemas Microinformáticos y Redes', Ciclo::GRADO_MEDIO),
      ];
+ }
+
+ function usuarios(): array
+ {
+     return [
+         'ana.lopez@marcapersonalfp.test' => [
+             'firstName' => 'Ana',
+             'lastName'  => 'López',
+             'rol'       => 'alumno',
+             'password'  => '$2y$12$00n4HG7RZaz3lNVMTarJOO3jLCApuQiswgv7PNmVlU3R2GOwxMl3a',
+         ],
+         'elena.ruiz@marcapersonalfp.test' => [
+             'firstName' => 'Elena',
+             'lastName'  => 'Ruiz',
+             'rol'       => 'docente',
+             'password'  => '$2y$12$BINitndxk98fCl1tATEPJO197vJCdYRXZh6Zc2kBs.atYSvCk6iq.',
+         ],
+     ];
+ }
+
+ /** Abre (o retoma) la sesión con la cookie protegida, como en 4.1. */
+ function iniciarSesion(): void
+ {
+     session_start([
+         'cookie_httponly' => true,
+         'cookie_samesite' => 'Lax',
+     ]);
+ }
+
+ /** @return array{email: string, firstName: string, lastName: string, rol: string}|null */
+ function usuarioActual(): ?array
+ {
+     return $_SESSION['usuario'] ?? null;
+ }
+
+ /**
+  * Devuelve el usuario de la sesión o, si no hay ninguno, redirige al login y termina.
+  *
+  * @return array{email: string, firstName: string, lastName: string, rol: string}
+  */
+ function exigirLogin(): array
+ {
+     $usuario = usuarioActual();
+     if ($usuario === null) {
+         header('Location: RA4_login.php');
+         exit;
+     }
+
+     return $usuario;
  }
