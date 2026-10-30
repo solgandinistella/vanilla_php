@@ -2,5 +2,5 @@ composer.json
 composer.lock
 vendor/
 .phpunit.result.cache
-ahorcado.php
-prueba*
+public/ahorcado.php
+public/prueba*
