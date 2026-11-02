@@ -25,7 +25,9 @@
    <p>Usuario: <?= e($usuario['firstName'] . ' ' . $usuario['lastName']) ?></p>
    <p>Email: <?= e($usuario['email']) ?></p>
    <p>Rol: <?= e($usuario['rol']) ?></p>
-
+   <?php if ($usuario['rol'] === 'alumno'): ?> <!--Comprobación pq los docentes no pueden acceder a ningún currículo: quien escriba la dirección a mano llega igual a la página. Lo que la protege es exigirRol().-->
+   <p><a href="RA4_miCurriculo.php">Mi currículo</a></p>
+   <?php endif; ?>
    <form action="RA4_logout.php" method="post">
      <button type="submit">Cerrar sesión</button>
    </form>

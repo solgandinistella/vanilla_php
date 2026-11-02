@@ -72,3 +72,20 @@
 
      return $usuario;
  }
+
+ /**
+  * Como exigirLogin(), pero además exige un rol. Si el usuario no lo tiene,
+  * responde 403 (prohibido) y termina.
+  *
+  * @return array{email: string, firstName: string, lastName: string, rol: string}
+  */
+ function exigirRol(string $rol): array
+ {
+     $usuario = exigirLogin();
+     if ($usuario['rol'] !== $rol) {
+         http_response_code(403); // 403 FORBIDDEN -> el servidor sabe quien es, pero le niega acceso (401 sería si no se sabe quién es, UNAUTHORIZED)
+         exit('No tienes permiso para ver esta página.'); //Si el usuario que tiene la sesión iniciado tiene un rol distinto al proporcionado, no puede ver esa página, y crea otra página con ese msj de error
+     }
+
+     return $usuario; // Si el usuario que tiene la sesión iniciado tiene el rol igual al proporcionado, se devuelve el usuario
+ }
